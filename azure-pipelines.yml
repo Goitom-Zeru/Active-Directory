@@ -1,0 +1,66 @@
+stages:
+- stage: 
+  jobs:
+    - job: validation
+      continueOnError: false
+      steps:
+      - task: TerraformInstaller@0
+        displayName: 'install'
+        inputs:
+          terraformVersion: '0.12.26'
+      - task: TerraformTaskV4@4
+        displayName: 'init'
+        inputs:
+          provider: 'azurerm'
+          command: 'init'
+          backendServiceArm: 'Terraform Ad Deploy'
+          backendAzureRmResourceGroupName: 'zeru-rg1'
+          backendAzureRmStorageAccountName: 'goitomstrgaccount'
+          backendAzureRmContainerName: 'tfstate'
+          backendAzureRmKey: 'terraform.tfstate'
+      - task: TerraformTaskV4@4
+        displayName: 'validate'
+        inputs:
+          provider: 'azurerm'
+          command: 'validate'
+- stage: deploy
+  jobs:
+  - deployment: deploy_terraform
+    continueOnError: false
+    environment: 'dev'
+    strategy:
+     runOnce:
+       deploy:
+        steps:
+          - checkout: self
+          - task: TerraformInstaller@0
+            displayName: 'install'
+            inputs:
+              terraformVersion: '0.12.26'
+          - task: TerraformTaskV4@4
+            displayName: 'init'
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              backendServiceArm: 'Terraform Ad Deploy'
+              backendAzureRmResourceGroupName: 'zeru-rg1'
+              backendAzureRmStorageAccountName: 'goitomstrgaccount'
+              backendAzureRmContainerName: 'tfstate'
+              backendAzureRmKey: 'terraform.tfstate'
+          - task: TerraformTaskV4@4
+            displayName: 'plan'
+            inputs:
+              provider: 'azurerm'
+              command: 'plan'
+              environmentServiceNameAzureRM: 'Terraform Ad Deploy'
+          - task: TerraformTaskV4@4
+            displayName: 'validate'
+            inputs:
+              provider: 'azurerm'
+              command: 'validate'
+          - task: TerraformTaskV4@4
+            displayName: 'apply'
+            inputs:
+              provider: 'azurerm'
+              command: 'apply'
+              environmentServiceNameAzureRM: 'Terraform Ad Deploy'
