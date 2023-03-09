@@ -13,9 +13,9 @@ stages:
         inputs:
           provider: 'azurerm'
           command: 'init'
-          backendServiceArm: 'Terraform Ad Deploy'
-          backendAzureRmResourceGroupName: 'zeru-rg1'
-          backendAzureRmStorageAccountName: 'goitomstrgaccount'
+          backendServiceArm: 'MS-Service-Connection'
+          backendAzureRmResourceGroupName: 'zeru-rg001'
+          backendAzureRmStorageAccountName: 'zeruaccount001'
           backendAzureRmContainerName: 'tfstate'
           backendAzureRmKey: 'terraform.tfstate'
       - task: TerraformTaskV4@4
@@ -42,9 +42,9 @@ stages:
             inputs:
               provider: 'azurerm'
               command: 'init'
-              backendServiceArm: 'Terraform Ad Deploy'
-              backendAzureRmResourceGroupName: 'zeru-rg1'
-              backendAzureRmStorageAccountName: 'goitomstrgaccount'
+              backendServiceArm: 'MS-Service-Connection'
+              backendAzureRmResourceGroupName: 'zeru-rg001'
+              backendAzureRmStorageAccountName: 'zeruaccount001'
               backendAzureRmContainerName: 'tfstate'
               backendAzureRmKey: 'terraform.tfstate'
           - task: TerraformTaskV4@4
@@ -63,4 +63,4 @@ stages:
             inputs:
               provider: 'azurerm'
               command: 'apply'
-              environmentServiceNameAzureRM: 'Terraform Ad Deploy'
+              environmentServiceNameAzureRM: 'MS-Service-Connection'
